@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = DjangoTranslation::VERSION
   spec.authors       = ['Simon Koener']
   spec.email         = ['simon.koener66@outlook.com']
-  spec.description   = %q{A short description of danger-django_translation.}
-  spec.summary       = %q{A longer description of danger-django_translation.}
-  spec.homepage      = 'https://github.com/Simon Koener/danger-django_translation'
+  spec.description   = %q{Danger plugin to remind developers to run `makemessages` django command before submitting pull request.}
+  spec.summary       = %q{Danger plugin to remind developers to run `makemessages`}
+  spec.homepage      = 'https://github.com/simonkoener66/danger-django_translation'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)

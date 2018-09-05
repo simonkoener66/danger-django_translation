@@ -1,33 +1,16 @@
 module Danger
-  # This is your plugin class. Any attributes or methods you expose here will
-  # be available from within your Dangerfile.
-  #
-  # To be published on the Danger plugins site, you will need to have
-  # the public interface documented. Danger uses [YARD](http://yardoc.org/)
-  # for generating documentation from your plugin source, and you can verify
-  # by running `danger plugins lint` or `bundle exec rake spec`.
-  #
-  # You should replace these comments with a public description of your library.
-  #
-  # @example Ensure people are well warned about merging on Mondays
-  #
-  #          my_plugin.warn_on_mondays
-  #
-  # @see  Simon Koener/danger-django_translation
-  # @tags monday, weekends, time, rattata
+  # This danger plugin checks if .po translation files included in PR are up-to-date.
+  # It's done by running `makemessages` django command first and then see if git diff
+  # includes any .po files. If so, it means .po files are outdated and build process
+  # should be blocked.
   #
   class DangerDjangoTranslation < Plugin
+    def warn_on_django_po_difference
+      system('python manage.py makemessages -e html -e py -e pug -e txt -e md -l en-us')
 
-    # An attribute that you can read/write from your Dangerfile
-    #
-    # @return   [Array<String>]
-    attr_accessor :my_attribute
-
-    # A method that you can call from your Dangerfile
-    # @return   [Array<String>]
-    #
-    def warn_on_mondays
-      warn 'Trying to merge code on a Monday' if Date.today.wday == 1
+      if diff_for_file('django.po')
+        fail 'django.po translation files are outdated. Please run makemessages before submitting PR.'
+      end
     end
   end
 end
